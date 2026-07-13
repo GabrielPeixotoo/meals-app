@@ -1,14 +1,17 @@
+import { Category } from "@/models/category";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
-type CategoryGridTileProps = {
-  title: string;
-  color: string;
-};
+interface CategoryGridTileProps {
+  category: Category;
+  onPress: (id: string) => void;
+}
 
 export default function CategoryGridTile({
-  title,
-  color,
+  category,
+  onPress,
 }: CategoryGridTileProps) {
+  const handlePress = () => onPress(category.id);
+
   return (
     <View style={[styles.gridItem]}>
       <Pressable
@@ -17,9 +20,12 @@ export default function CategoryGridTile({
           styles.button,
           pressed ? styles.buttonPressed : null,
         ]}
+        onPress={handlePress}
       >
-        <View style={[styles.innerContainer, { backgroundColor: color }]}>
-          <Text style={styles.title}>{title}</Text>
+        <View
+          style={[styles.innerContainer, { backgroundColor: category.color }]}
+        >
+          <Text style={styles.title}>{category.title}</Text>
         </View>
       </Pressable>
     </View>
