@@ -1,11 +1,12 @@
 import MealItem from "@/components/MealItem";
-import { MEALS } from "@/data/dummy_data";
+import { CATEGORIES, MEALS } from "@/data/dummy_data";
 import { Meal } from "@/models/meal";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FlatList, StyleSheet, View } from "react-native";
 
 export default function MealsOverview() {
   const params = useLocalSearchParams();
+  const router = useRouter();
 
   const categoryId = Array.isArray(params.id) ? params.id[0] : params.id;
 
@@ -13,12 +14,27 @@ export default function MealsOverview() {
     return meal.categoryIds.indexOf(categoryId) >= 0;
   });
 
+  const categoryTitle = CATEGORIES.find((cat) => cat.id === categoryId)?.title;
+
   function renderMealItem({ item }: { item: Meal }) {
-    return <MealItem title={item.title} imageUrl={item.imageUrl} />;
+    return (
+      <MealItem
+        onPress={() =>
+          router.push({
+            pathname: "/meal_details",
+            params: {
+              id: item.id,
+            },
+          })
+        }
+        {...item}
+      />
+    );
   }
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ title: categoryTitle ?? "" }} />
       <FlatList
         data={displayedMeals}
         keyExtractor={(item) => item.id}
