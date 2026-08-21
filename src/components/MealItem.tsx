@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import MealDetailsInfo from "./MealDetailsInfo";
+import MealDetailsInfo from "./MealDetails/MealDetailsInfo";
 
 interface MealItemProps {
   title: string;

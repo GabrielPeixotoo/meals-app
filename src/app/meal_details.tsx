@@ -1,7 +1,9 @@
-import MealDetailsInfo from "@/components/MealDetailsInfo";
+import List from "@/components/MealDetails/List";
+import MealDetailsInfo from "@/components/MealDetails/MealDetailsInfo";
+import Subtitle from "@/components/MealDetails/Subtitle";
 import { MEALS } from "@/data/dummy_data";
 import { useLocalSearchParams } from "expo-router";
-import { Image, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function MealDetails() {
   const params = useLocalSearchParams();
@@ -18,23 +20,55 @@ export default function MealDetails() {
     );
   }
 
-  const { imageUrl, title, duration, complexity, affordability, ingredients } =
-    meal;
+  const {
+    imageUrl,
+    title,
+    duration,
+    complexity,
+    affordability,
+    ingredients,
+    steps,
+  } = meal;
 
   return (
-    <View>
-      <Image source={{ uri: imageUrl }} />
-      <Text>{title}</Text>
+    <ScrollView style={styles.root}>
+      <Image style={styles.image} source={{ uri: imageUrl }} />
+      <Text style={styles.title}>{title}</Text>
       <MealDetailsInfo
         duration={duration}
         complexity={complexity}
         affordability={affordability}
       />
-      <Text>Ingredients</Text>
-      {ingredients.map((ingredient) => (
-        <Text key={ingredient}>{ingredient}</Text>
-      ))}
-      <Text>Steps</Text>
-    </View>
+      <View style={styles.listOuterContainer}>
+        <View style={styles.listContainer}>
+          <Subtitle>Ingredients</Subtitle>
+          <List items={ingredients} />
+          <Subtitle>Steps</Subtitle>
+          <List items={steps} />
+        </View>
+      </View>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    marginBottom: 32,
+  },
+  image: {
+    width: "100%",
+    height: 350,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 24,
+    margin: 8,
+    textAlign: "center",
+  },
+  listOuterContainer: {
+    alignItems: "center",
+  },
+  listContainer: {
+    width: "80%",
+  },
+});
