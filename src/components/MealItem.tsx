@@ -6,6 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
+import MealDetailsInfo from "./MealDetailsInfo";
 
 interface MealItemProps {
   title: string;
@@ -36,12 +37,11 @@ export default function MealItem({
             <Image style={styles.image} source={{ uri: imageUrl }} />
             <Text style={styles.title}>{title}</Text>
           </View>
-
-          <View style={styles.details}>
-            <Text style={styles.detailItem}>{duration}</Text>
-            <Text style={styles.detailItem}>{complexity.toUpperCase()}</Text>
-            <Text style={styles.detailItem}>{affordability.toUpperCase()}</Text>
-          </View>
+          <MealDetailsInfo
+            duration={duration}
+            complexity={complexity}
+            affordability={affordability}
+          />
         </View>
       </Pressable>
     </View>
@@ -79,14 +79,5 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 16,
     overflow: Platform.OS == "android" ? "hidden" : "visible",
-  },
-  details: {
-    flexDirection: "row",
-    justifyContent: "center",
-    padding: 8,
-  },
-  detailItem: {
-    marginHorizontal: 4,
-    fontSize: 12,
   },
 });

@@ -1,7 +1,7 @@
-import MealItem from "@/components/MealItem";
+import MealDetailsInfo from "@/components/MealDetailsInfo";
 import { MEALS } from "@/data/dummy_data";
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 export default function MealDetails() {
   const params = useLocalSearchParams();
@@ -10,11 +10,31 @@ export default function MealDetails() {
 
   const meal = MEALS.find((meal) => meal.id === mealId);
 
-  return <View style={styles.screen}>{meal && <MealItem {...meal} />}</View>;
-}
+  if (!meal) {
+    return (
+      <View>
+        <Text>Refeição não encontrada...</Text>
+      </View>
+    );
+  }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-});
+  const { imageUrl, title, duration, complexity, affordability, ingredients } =
+    meal;
+
+  return (
+    <View>
+      <Image source={{ uri: imageUrl }} />
+      <Text>{title}</Text>
+      <MealDetailsInfo
+        duration={duration}
+        complexity={complexity}
+        affordability={affordability}
+      />
+      <Text>Ingredients</Text>
+      {ingredients.map((ingredient) => (
+        <Text key={ingredient}>{ingredient}</Text>
+      ))}
+      <Text>Steps</Text>
+    </View>
+  );
+}
