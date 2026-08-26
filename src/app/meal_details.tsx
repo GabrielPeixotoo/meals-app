@@ -1,14 +1,15 @@
+import IconButton from "@/components/IconButton";
 import List from "@/components/MealDetails/List";
 import MealDetailsInfo from "@/components/MealDetails/MealDetailsInfo";
 import Subtitle from "@/components/MealDetails/Subtitle";
 import { MEALS } from "@/data/dummy_data";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function MealDetails() {
-  const params = useLocalSearchParams();
+  const params = useLocalSearchParams<{ id: string }>();
 
-  const mealId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const mealId = params.id;
 
   const meal = MEALS.find((meal) => meal.id === mealId);
 
@@ -30,8 +31,19 @@ export default function MealDetails() {
     steps,
   } = meal;
 
+  function onTapFavorite() {}
+
   return (
     <ScrollView style={styles.root}>
+      <Stack.Screen
+        options={{
+          headerRight: () => {
+            return (
+              <IconButton name="star" onPress={onTapFavorite} color="black" />
+            );
+          },
+        }}
+      />
       <Image style={styles.image} source={{ uri: imageUrl }} />
       <Text style={styles.title}>{title}</Text>
       <MealDetailsInfo
