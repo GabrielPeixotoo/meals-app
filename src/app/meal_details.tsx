@@ -44,6 +44,7 @@ export default function MealDetails() {
           },
         }}
       />
+
       <Image style={styles.image} source={{ uri: imageUrl }} />
       <Text style={styles.title}>{title}</Text>
       <MealDetailsInfo
