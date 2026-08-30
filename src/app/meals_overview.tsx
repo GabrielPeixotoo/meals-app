@@ -5,10 +5,8 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FlatList, StyleSheet, View } from "react-native";
 
 export default function MealsOverview() {
-  const params = useLocalSearchParams();
+  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
   const router = useRouter();
-
-  const categoryId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const displayedMeals = MEALS.filter((meal) => {
     return meal.categoryIds.indexOf(categoryId) >= 0;

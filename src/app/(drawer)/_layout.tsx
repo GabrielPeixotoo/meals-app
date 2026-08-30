@@ -1,3 +1,4 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Drawer } from "expo-router/drawer";
 
 export default function RootLayout() {
@@ -7,7 +8,9 @@ export default function RootLayout() {
         headerStyle: {
           backgroundColor: "#9d19fb",
         },
-        title: "",
+        headerTitleStyle: {
+          color: "white",
+        },
       }}
     >
       <Drawer.Screen
@@ -15,15 +18,20 @@ export default function RootLayout() {
         options={{
           drawerLabel: "All Categories",
           headerTitle: "All Categories",
-          headerTitleStyle: {
-            color: "white",
-          },
+
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="list" color={color} size={size} />
+          ),
         }}
       />
       <Drawer.Screen
         name="favorites"
         options={{
           drawerLabel: "Favorites",
+          headerTitle: "Favorites",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="star" color={color} size={size} />
+          ),
         }}
       />
     </Drawer>

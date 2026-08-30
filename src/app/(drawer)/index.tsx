@@ -10,7 +10,7 @@ export default function Index() {
     router.push({
       pathname: "/meals_overview",
       params: {
-        id,
+        categoryId: id,
       },
     });
   }
