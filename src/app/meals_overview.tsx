@@ -34,7 +34,14 @@ export default function MealsOverview() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: categoryTitle ?? "" }} />
+      <Stack.Screen
+        options={{
+          title: categoryTitle ?? "",
+          headerTitleStyle: {
+            color: "white",
+          },
+        }}
+      />
       <FlatList
         data={displayedMeals}
         keyExtractor={(item) => item.id}
