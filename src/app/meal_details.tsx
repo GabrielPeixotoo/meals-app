@@ -3,13 +3,19 @@ import List from "@/components/MealDetails/List";
 import MealDetailsInfo from "@/components/MealDetails/MealDetailsInfo";
 import Subtitle from "@/components/MealDetails/Subtitle";
 import { MEALS } from "@/data/dummy_data";
+import { FavoritesContext } from "@/store/context/favorites-context";
 import { Stack, useLocalSearchParams } from "expo-router";
+import { useContext } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function MealDetails() {
   const params = useLocalSearchParams<{ id: string }>();
 
+  const favoriteMealCtx = useContext(FavoritesContext);
+
   const mealId = params.id;
+
+  const mealIsFavorite = favoriteMealCtx.ids.includes(mealId);
 
   const meal = MEALS.find((meal) => meal.id === mealId);
 
@@ -31,7 +37,13 @@ export default function MealDetails() {
     steps,
   } = meal;
 
-  function onTapFavorite() {}
+  function onTapFavorite() {
+    if (mealIsFavorite) {
+      return favoriteMealCtx.removeFavorite(mealId);
+    }
+
+    favoriteMealCtx.addFavorite(mealId);
+  }
 
   return (
     <ScrollView style={styles.root}>
@@ -39,7 +51,11 @@ export default function MealDetails() {
         options={{
           headerRight: () => {
             return (
-              <IconButton name="star" onPress={onTapFavorite} color="black" />
+              <IconButton
+                name={mealIsFavorite ? "star" : "star-outline"}
+                onPress={onTapFavorite}
+                color="black"
+              />
             );
           },
         }}

@@ -16,7 +16,7 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-function FavoritesContextProvider({ children }: ProviderProps) {
+export function FavoritesContextProvider({ children }: ProviderProps) {
   const [favoriteMealIds, setFavoriteMealIds] = useState<string[]>([]);
 
   function addFavorite(id: string) {
