@@ -1,8 +1,6 @@
-import MealItem from "@/components/MealItem";
+import MealsList from "@/components/MealsList/MealsList";
 import { CATEGORIES, MEALS } from "@/data/dummy_data";
-import { Meal } from "@/models/meal";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { FlatList, StyleSheet, View } from "react-native";
 
 export default function MealsOverview() {
   const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
@@ -14,24 +12,17 @@ export default function MealsOverview() {
 
   const categoryTitle = CATEGORIES.find((cat) => cat.id === categoryId)?.title;
 
-  function renderMealItem({ item }: { item: Meal }) {
-    return (
-      <MealItem
-        onPress={() =>
-          router.push({
-            pathname: "/meal_details",
-            params: {
-              id: item.id,
-            },
-          })
-        }
-        {...item}
-      />
-    );
+  function navigateToMealDetails(id: string) {
+    router.push({
+      pathname: "/meal_details",
+      params: {
+        id,
+      },
+    });
   }
 
   return (
-    <View style={styles.container}>
+    <>
       <Stack.Screen
         options={{
           title: categoryTitle ?? "",
@@ -40,18 +31,7 @@ export default function MealsOverview() {
           },
         }}
       />
-      <FlatList
-        data={displayedMeals}
-        keyExtractor={(item) => item.id}
-        renderItem={renderMealItem}
-      />
-    </View>
+      <MealsList meals={displayedMeals} onPress={navigateToMealDetails} />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-});
