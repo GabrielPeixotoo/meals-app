@@ -1,18 +1,16 @@
 import MealsList from "@/components/MealsList/MealsList";
 import { MEALS } from "@/data/dummy_data";
-import { FavoritesContext } from "@/store/context/favorites-context";
+import { RootState } from "@/store/redux/store";
 import { useRouter } from "expo-router";
-import { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 
 export default function Favorites() {
   const router = useRouter();
 
-  const favoriteMealCtx = useContext(FavoritesContext);
+  const mealIds = useSelector((state: RootState) => state.favoriteMeals.ids);
 
-  const favoriteMeals = MEALS.filter((meal) =>
-    favoriteMealCtx.ids.includes(meal.id),
-  );
+  const favoriteMeals = MEALS.filter((meal) => mealIds.includes(meal.id));
 
   function navigateToMealDetails(id: string) {
     router.push({
