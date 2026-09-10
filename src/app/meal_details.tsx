@@ -3,19 +3,24 @@ import List from "@/components/MealDetails/List";
 import MealDetailsInfo from "@/components/MealDetails/MealDetailsInfo";
 import Subtitle from "@/components/MealDetails/Subtitle";
 import { MEALS } from "@/data/dummy_data";
-import { FavoritesContext } from "@/store/context/favorites-context";
+import { addFavorite, removeFavorite } from "@/store/redux/favorites";
+import { RootState } from "@/store/redux/store";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { useContext } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function MealDetails() {
   const params = useLocalSearchParams<{ id: string }>();
 
-  const favoriteMealCtx = useContext(FavoritesContext);
+  const favoriteMealIds = useSelector(
+    (state: RootState) => state.favoriteMeals.ids,
+  );
+
+  const dispatch = useDispatch();
 
   const mealId = params.id;
 
-  const mealIsFavorite = favoriteMealCtx.ids.includes(mealId);
+  const mealIsFavorite = favoriteMealIds.includes(mealId);
 
   const meal = MEALS.find((meal) => meal.id === mealId);
 
@@ -39,10 +44,10 @@ export default function MealDetails() {
 
   function onTapFavorite() {
     if (mealIsFavorite) {
-      return favoriteMealCtx.removeFavorite(mealId);
+      return dispatch(removeFavorite({ id: mealId }));
     }
 
-    favoriteMealCtx.addFavorite(mealId);
+    return dispatch(addFavorite({ id: mealId }));
   }
 
   return (
