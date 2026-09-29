@@ -27,7 +27,7 @@ export default function MealDetails() {
   if (!meal) {
     return (
       <View>
-        <Text>Refeição não encontrada...</Text>
+        <Text>Meal not found...</Text>
       </View>
     );
   }

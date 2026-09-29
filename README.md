@@ -17,8 +17,8 @@ A cross-platform recipe browser for **iOS, Android and Web**, built with **React
 | :-----------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: |
 | <img src="assets/screenshots/categories.png" width="240" alt="Category grid" /> | <img src="assets/screenshots/meals.png" width="240" alt="Meals in the Quick & Easy category" /> | <img src="assets/screenshots/meal-details.png" width="240" alt="Classic Hamburger details with favorite button" /> |
 
-| Favorites | Drawer navigation |
-| :---: | :---: |
+|                                              Favorites                                              |                                              Drawer navigation                                              |
+| :-------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
 | <img src="assets/screenshots/favorites.png" width="240" alt="Favorites screen with a saved meal" /> | <img src="assets/screenshots/drawer.png" width="240" alt="Drawer menu with All Categories and Favorites" /> |
 
 ---

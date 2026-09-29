@@ -78,6 +78,6 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowRadius: 16,
-    overflow: Platform.OS == "android" ? "hidden" : "visible",
+    overflow: Platform.OS === "android" ? "hidden" : "visible",
   },
 });
