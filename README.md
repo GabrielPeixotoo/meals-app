@@ -116,7 +116,16 @@ flowchart LR
 git clone https://github.com/GabrielPeixotoo/meals-app.git
 cd meals-app
 npm install
+cp .env.example .env   # optional: the public test key "1" is used by default
 ```
+
+### Environment variables
+
+| Variable                     | Description                                            | Default               |
+| ---------------------------- | ------------------------------------------------------ | --------------------- |
+| `EXPO_PUBLIC_MEALDB_API_KEY` | [TheMealDB](https://www.themealdb.com/api.php) API key | `1` (public test key) |
+
+> `EXPO_PUBLIC_` variables are inlined into the app bundle at build time, so they must never hold secrets.
 
 ### Running
 
