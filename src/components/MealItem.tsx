@@ -1,3 +1,4 @@
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { Image } from "expo-image";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -8,21 +9,25 @@ interface MealItemProps {
 }
 
 export default function MealItem({ name, thumbnail, onPress }: MealItemProps) {
+  const colors = useThemeColors();
+
   return (
-    <View style={styles.mealItem}>
+    <View style={[styles.mealItem, { backgroundColor: colors.card }]}>
       <Pressable
-        android_ripple={{ color: "#ccc" }}
+        android_ripple={{ color: colors.ripple }}
         style={({ pressed }) => [pressed ? styles.buttonPressed : null]}
         onPress={onPress}
       >
         <View style={styles.innerContainer}>
           <Image
-            style={styles.image}
+            // Background doubles as a placeholder while loading or when the
+            // meal has no photo
+            style={[styles.image, { backgroundColor: colors.placeholder }]}
             source={thumbnail}
             transition={200}
             accessibilityIgnoresInvertColors
           />
-          <Text style={styles.title}>{name}</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{name}</Text>
         </View>
       </Pressable>
     </View>
@@ -36,8 +41,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 200,
-    // Placeholder while loading or when the meal has no photo
-    backgroundColor: "#e5e5e5",
   },
   title: {
     fontWeight: "bold",
@@ -52,7 +55,6 @@ const styles = StyleSheet.create({
   mealItem: {
     margin: 16,
     borderRadius: 8,
-    backgroundColor: "white",
     elevation: 4,
     shadowColor: "black",
     shadowOpacity: 0.25,

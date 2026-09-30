@@ -1,4 +1,5 @@
 import { Category } from "@/api/schemas";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { Image } from "expo-image";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -11,12 +12,13 @@ export default function CategoryGridTile({
   category,
   onPress,
 }: CategoryGridTileProps) {
+  const colors = useThemeColors();
   const handlePress = () => onPress(category.name);
 
   return (
-    <View style={styles.gridItem}>
+    <View style={[styles.gridItem, { backgroundColor: colors.card }]}>
       <Pressable
-        android_ripple={{ color: "#ccc" }}
+        android_ripple={{ color: colors.ripple }}
         style={({ pressed }) => [
           styles.button,
           pressed ? styles.buttonPressed : null,
@@ -31,7 +33,9 @@ export default function CategoryGridTile({
             transition={200}
             accessibilityIgnoresInvertColors
           />
-          <Text style={styles.title}>{category.name}</Text>
+          <Text style={[styles.title, { color: colors.text }]}>
+            {category.name}
+          </Text>
         </View>
       </Pressable>
     </View>
@@ -45,7 +49,6 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 8,
     elevation: 4,
-    backgroundColor: "white",
     shadowColor: "black",
     shadowOpacity: 0.25,
     shadowOffset: {

@@ -19,6 +19,7 @@ export function getAreas() {
   return get("list.php", areasResponseSchema, { a: "list" });
 }
 
+/** Accepts an area ("Japanese") or a country ("Japan"). */
 export function getMealsByArea(area: string) {
   return get("filter.php", mealSummariesResponseSchema, { a: area });
 }
@@ -29,5 +30,10 @@ export function searchMealsByName(query: string) {
 
 export async function getMealById(id: string): Promise<MealDetail | null> {
   const meals = await get("lookup.php", mealDetailsResponseSchema, { i: id });
+  return meals[0] ?? null;
+}
+
+export async function getRandomMeal(): Promise<MealDetail | null> {
+  const meals = await get("random.php", mealDetailsResponseSchema);
   return meals[0] ?? null;
 }

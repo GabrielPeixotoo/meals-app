@@ -1,3 +1,4 @@
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -6,9 +7,11 @@ interface SubtitleProps {
 }
 
 export default function Subtitle({ children }: SubtitleProps) {
+  const colors = useThemeColors();
+
   return (
-    <View style={styles.subtitleContainer}>
-      <Text style={styles.subtitle}>{children}</Text>
+    <View style={[styles.subtitleContainer, { borderColor: colors.accent }]}>
+      <Text style={[styles.subtitle, { color: colors.text }]}>{children}</Text>
     </View>
   );
 }
@@ -19,7 +22,6 @@ const styles = StyleSheet.create({
     padding: 6,
     marginHorizontal: 12,
     borderBottomWidth: 2,
-    borderColor: "#f3c9c1",
   },
   subtitle: {
     fontSize: 18,

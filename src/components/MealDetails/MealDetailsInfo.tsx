@@ -1,3 +1,4 @@
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { StyleSheet, Text, View } from "react-native";
 
 interface MealDetailsInfoProps {
@@ -9,6 +10,7 @@ export default function MealDetailsInfo({
   category,
   area,
 }: MealDetailsInfoProps) {
+  const colors = useThemeColors();
   const details = [category, area].filter(Boolean);
 
   if (details.length === 0) return null;
@@ -16,7 +18,10 @@ export default function MealDetailsInfo({
   return (
     <View style={styles.details}>
       {details.map((detail) => (
-        <Text key={detail} style={styles.detailItem}>
+        <Text
+          key={detail}
+          style={[styles.detailItem, { color: colors.textMuted }]}
+        >
           {detail?.toUpperCase()}
         </Text>
       ))}

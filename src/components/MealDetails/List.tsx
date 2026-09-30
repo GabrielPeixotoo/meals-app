@@ -1,3 +1,4 @@
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { StyleSheet, Text, View } from "react-native";
 
 interface ListProps {
@@ -5,9 +6,14 @@ interface ListProps {
 }
 
 export default function List({ items }: ListProps) {
+  const colors = useThemeColors();
+
   return items.map((item, index) => (
-    <View key={index} style={styles.listItem}>
-      <Text style={styles.itemText}>{item}</Text>
+    <View
+      key={index}
+      style={[styles.listItem, { backgroundColor: colors.accent }]}
+    >
+      <Text style={[styles.itemText, { color: colors.text }]}>{item}</Text>
     </View>
   ));
 }
@@ -19,7 +25,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     marginVertical: 8,
     marginHorizontal: 12,
-    backgroundColor: "#f3c9c1",
   },
   itemText: {
     textAlign: "center",

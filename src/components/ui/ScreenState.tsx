@@ -1,3 +1,4 @@
+import { useThemeColors } from "@/hooks/useThemeColors";
 import {
   ActivityIndicator,
   Pressable,
@@ -6,12 +7,12 @@ import {
   View,
 } from "react-native";
 
-const PRIMARY_COLOR = "#9d19fb";
-
 export function LoadingState() {
+  const colors = useThemeColors();
+
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+      <ActivityIndicator size="large" color={colors.primary} />
     </View>
   );
 }
@@ -22,15 +23,29 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({ message, onRetry }: ErrorStateProps) {
+  const colors = useThemeColors();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Something went wrong</Text>
-      {message ? <Text style={styles.message}>{message}</Text> : null}
+      <Text style={[styles.title, { color: colors.text }]}>
+        Something went wrong
+      </Text>
+      {message ? (
+        <Text style={[styles.message, { color: colors.textMuted }]}>
+          {message}
+        </Text>
+      ) : null}
       <Pressable
         onPress={onRetry}
-        style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: colors.primary },
+          pressed && styles.pressed,
+        ]}
       >
-        <Text style={styles.buttonText}>Try again</Text>
+        <Text style={[styles.buttonText, { color: colors.onPrimary }]}>
+          Try again
+        </Text>
       </Pressable>
     </View>
   );
@@ -41,9 +56,11 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ message }: EmptyStateProps) {
+  const colors = useThemeColors();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{message}</Text>
+      <Text style={[styles.title, { color: colors.text }]}>{message}</Text>
     </View>
   );
 }
@@ -63,7 +80,6 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 14,
-    color: "#666",
     textAlign: "center",
   },
   button: {
@@ -71,13 +87,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: PRIMARY_COLOR,
   },
   pressed: {
     opacity: 0.7,
   },
   buttonText: {
-    color: "white",
     fontWeight: "bold",
   },
 });

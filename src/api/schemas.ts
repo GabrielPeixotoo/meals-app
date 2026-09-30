@@ -64,6 +64,7 @@ export const mealDetailSchema = z
     strMealThumb: optionalText,
     strCategory: optionalText,
     strArea: optionalText,
+    strCountry: optionalText,
     strInstructions: optionalText,
     strTags: optionalText,
     strYoutube: optionalText,
@@ -75,7 +76,7 @@ export const mealDetailSchema = z
     name: raw.strMeal,
     thumbnail: raw.strMealThumb,
     category: raw.strCategory,
-    area: raw.strArea,
+    area: raw.strArea ?? raw.strCountry,
     tags: parseTags(raw.strTags),
     ingredients: parseIngredients(raw),
     steps: parseInstructions(raw.strInstructions),
@@ -87,12 +88,21 @@ export const mealDetailsResponseSchema = mealsResponse(mealDetailSchema);
 
 export const areasResponseSchema = z
   .object({
-    meals: z.array(z.object({ strArea: optionalText })).nullable(),
+    meals: z
+      .array(z.object({ strArea: optionalText, strCountry: optionalText }))
+      .nullable(),
   })
   .transform((res) =>
-    (res.meals ?? []).flatMap(({ strArea }) => (strArea ? [strArea] : [])),
+    (res.meals ?? []).flatMap(({ strArea, strCountry }) => {
+      const country = strCountry ?? strArea;
+      if (!country) return [];
+      // Filtering by country finds more meals than by area name (e.g.
+      // "Brazil" has meals, "Brazilian" has none), so keep both
+      return [{ name: strArea ?? country, country }];
+    }),
   );
 
 export type Category = z.output<typeof categoriesResponseSchema>[number];
+export type Area = z.output<typeof areasResponseSchema>[number];
 export type MealSummary = z.output<typeof mealSummarySchema>;
 export type MealDetail = z.output<typeof mealDetailSchema>;
