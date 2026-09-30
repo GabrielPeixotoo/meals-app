@@ -2,6 +2,7 @@
 
 A cross-platform recipe browser for **iOS, Android and Web**, built with **React Native**, **Expo SDK 56** and **TypeScript**. Browse meals by category, see ingredients and step-by-step instructions, and save your favorites. Favorites live in a global store managed with **Redux Toolkit**.
 
+[![CI](https://github.com/GabrielPeixotoo/meals-app/actions/workflows/ci.yml/badge.svg)](https://github.com/GabrielPeixotoo/meals-app/actions/workflows/ci.yml)
 ![Expo](https://img.shields.io/badge/Expo-SDK%2056-000020?logo=expo&logoColor=white)
 ![React Native](https://img.shields.io/badge/React%20Native-0.85-61DAFB?logo=react&logoColor=black)
 ![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)
@@ -135,6 +136,8 @@ npm run ios        # Open on the iOS Simulator
 npm run android    # Open on the Android Emulator
 npm run web        # Open in the browser
 npm run lint       # Lint the project
+npm run typecheck  # Type-check with TypeScript
+npm test           # Run the unit and component tests
 ```
 
 ---
