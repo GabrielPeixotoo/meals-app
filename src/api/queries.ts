@@ -3,6 +3,7 @@ import {
   queryOptions,
   useQuery,
 } from "@tanstack/react-query";
+import { COUNTRIES_WITH_MEALS } from "@/constants/cuisines";
 import {
   getAreas,
   getCategories,
@@ -47,6 +48,8 @@ export function useAreas() {
   return useQuery({
     queryKey: mealKeys.areas(),
     queryFn: getAreas,
+    select: (areas) =>
+      areas.filter((area) => COUNTRIES_WITH_MEALS.has(area.country)),
   });
 }
 
