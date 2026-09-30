@@ -6,6 +6,10 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
+export const unstable_settings = {
+  anchor: "(drawer)",
+};
+
 export default function RootLayout() {
   useAppStateFocus();
   const colorScheme = useAppColorScheme();
