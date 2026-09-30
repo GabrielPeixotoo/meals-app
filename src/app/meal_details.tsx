@@ -8,22 +8,17 @@ import {
   ErrorState,
   LoadingState,
 } from "@/components/ui/ScreenState";
-import { addFavorite, removeFavorite } from "@/store/redux/favorites";
-import { RootState } from "@/store/redux/store";
+import { useFavoritesStore, useIsFavorite } from "@/store/favorites";
 import { Image } from "expo-image";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function MealDetails() {
   const { id: mealId } = useLocalSearchParams<{ id: string }>();
   const { data: meal, isPending, error, refetch } = useMeal(mealId);
 
-  const favoriteMealIds = useSelector(
-    (state: RootState) => state.favoriteMeals.ids,
-  );
-  const dispatch = useDispatch();
-  const mealIsFavorite = favoriteMealIds.includes(mealId);
+  const mealIsFavorite = useIsFavorite(mealId);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   if (isPending) return <LoadingState />;
   if (error) return <ErrorState message={error.message} onRetry={refetch} />;
@@ -32,11 +27,7 @@ export default function MealDetails() {
   const { thumbnail, name, category, area, ingredients, steps } = meal;
 
   function onTapFavorite() {
-    if (mealIsFavorite) {
-      return dispatch(removeFavorite({ id: mealId }));
-    }
-
-    return dispatch(addFavorite({ id: mealId }));
+    if (meal) toggleFavorite(meal);
   }
 
   return (
