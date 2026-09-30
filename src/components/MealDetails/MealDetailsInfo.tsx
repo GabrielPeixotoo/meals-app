@@ -1,21 +1,25 @@
 import { StyleSheet, Text, View } from "react-native";
 
 interface MealDetailsInfoProps {
-  duration: number;
-  complexity: string;
-  affordability: string;
+  category: string | null;
+  area: string | null;
 }
 
 export default function MealDetailsInfo({
-  duration,
-  complexity,
-  affordability,
+  category,
+  area,
 }: MealDetailsInfoProps) {
+  const details = [category, area].filter(Boolean);
+
+  if (details.length === 0) return null;
+
   return (
     <View style={styles.details}>
-      <Text style={styles.detailItem}>{duration}m</Text>
-      <Text style={styles.detailItem}>{complexity.toUpperCase()}</Text>
-      <Text style={styles.detailItem}>{affordability.toUpperCase()}</Text>
+      {details.map((detail) => (
+        <Text key={detail} style={styles.detailItem}>
+          {detail?.toUpperCase()}
+        </Text>
+      ))}
     </View>
   );
 }

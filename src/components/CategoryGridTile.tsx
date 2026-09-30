@@ -1,19 +1,20 @@
-import { Category } from "@/models/category";
+import { Category } from "@/api/schemas";
+import { Image } from "expo-image";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 interface CategoryGridTileProps {
   category: Category;
-  onPress: (id: string) => void;
+  onPress: (name: string) => void;
 }
 
 export default function CategoryGridTile({
   category,
   onPress,
 }: CategoryGridTileProps) {
-  const handlePress = () => onPress(category.id);
+  const handlePress = () => onPress(category.name);
 
   return (
-    <View style={[styles.gridItem]}>
+    <View style={styles.gridItem}>
       <Pressable
         android_ripple={{ color: "#ccc" }}
         style={({ pressed }) => [
@@ -22,10 +23,15 @@ export default function CategoryGridTile({
         ]}
         onPress={handlePress}
       >
-        <View
-          style={[styles.innerContainer, { backgroundColor: category.color }]}
-        >
-          <Text style={styles.title}>{category.title}</Text>
+        <View style={styles.innerContainer}>
+          <Image
+            style={styles.image}
+            source={category.thumbnail}
+            contentFit="contain"
+            transition={200}
+            accessibilityIgnoresInvertColors
+          />
+          <Text style={styles.title}>{category.name}</Text>
         </View>
       </Pressable>
     </View>
@@ -57,10 +63,15 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    padding: 16,
+    padding: 12,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+    gap: 8,
+  },
+  image: {
+    width: "100%",
+    flex: 1,
   },
   title: {
     fontWeight: "bold",

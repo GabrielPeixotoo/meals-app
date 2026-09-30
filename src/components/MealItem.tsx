@@ -1,30 +1,13 @@
-import {
-  Image,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import MealDetailsInfo from "./MealDetails/MealDetailsInfo";
+import { Image } from "expo-image";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 interface MealItemProps {
-  title: string;
-  imageUrl: string;
-  duration: number;
-  complexity: string;
-  affordability: string;
+  name: string;
+  thumbnail: string | null;
   onPress?: () => void;
 }
 
-export default function MealItem({
-  title,
-  imageUrl,
-  duration,
-  complexity,
-  affordability,
-  onPress,
-}: MealItemProps) {
+export default function MealItem({ name, thumbnail, onPress }: MealItemProps) {
   return (
     <View style={styles.mealItem}>
       <Pressable
@@ -33,15 +16,13 @@ export default function MealItem({
         onPress={onPress}
       >
         <View style={styles.innerContainer}>
-          <View>
-            <Image style={styles.image} source={{ uri: imageUrl }} />
-            <Text style={styles.title}>{title}</Text>
-          </View>
-          <MealDetailsInfo
-            duration={duration}
-            complexity={complexity}
-            affordability={affordability}
+          <Image
+            style={styles.image}
+            source={thumbnail}
+            transition={200}
+            accessibilityIgnoresInvertColors
           />
+          <Text style={styles.title}>{name}</Text>
         </View>
       </Pressable>
     </View>
@@ -55,6 +36,8 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 200,
+    // Placeholder while loading or when the meal has no photo
+    backgroundColor: "#e5e5e5",
   },
   title: {
     fontWeight: "bold",

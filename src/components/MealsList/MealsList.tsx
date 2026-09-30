@@ -1,17 +1,30 @@
-import { Meal } from "@/models/meal";
+import { MealSummary } from "@/api/schemas";
 import { useCallback } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import MealItem from "../MealItem";
 
 interface MealsListProps {
-  meals: Meal[];
+  meals: MealSummary[];
   onPress: (id: string) => void;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }
 
-export default function MealsList({ meals, onPress }: MealsListProps) {
+export default function MealsList({
+  meals,
+  onPress,
+  refreshing,
+  onRefresh,
+}: MealsListProps) {
   const renderMealItem = useCallback(
-    ({ item }: { item: Meal }) => {
-      return <MealItem onPress={() => onPress(item.id)} {...item} />;
+    ({ item }: { item: MealSummary }) => {
+      return (
+        <MealItem
+          name={item.name}
+          thumbnail={item.thumbnail}
+          onPress={() => onPress(item.id)}
+        />
+      );
     },
     [onPress],
   );
@@ -22,6 +35,8 @@ export default function MealsList({ meals, onPress }: MealsListProps) {
         data={meals}
         keyExtractor={(item) => item.id}
         renderItem={renderMealItem}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
     </View>
   );

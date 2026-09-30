@@ -1,46 +1,35 @@
+import { useMeal } from "@/api/queries";
 import IconButton from "@/components/IconButton";
 import List from "@/components/MealDetails/List";
 import MealDetailsInfo from "@/components/MealDetails/MealDetailsInfo";
 import Subtitle from "@/components/MealDetails/Subtitle";
-import { MEALS } from "@/data/dummy_data";
+import {
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from "@/components/ui/ScreenState";
 import { addFavorite, removeFavorite } from "@/store/redux/favorites";
 import { RootState } from "@/store/redux/store";
+import { Image } from "expo-image";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function MealDetails() {
-  const params = useLocalSearchParams<{ id: string }>();
+  const { id: mealId } = useLocalSearchParams<{ id: string }>();
+  const { data: meal, isPending, error, refetch } = useMeal(mealId);
 
   const favoriteMealIds = useSelector(
     (state: RootState) => state.favoriteMeals.ids,
   );
-
   const dispatch = useDispatch();
-
-  const mealId = params.id;
-
   const mealIsFavorite = favoriteMealIds.includes(mealId);
 
-  const meal = MEALS.find((meal) => meal.id === mealId);
+  if (isPending) return <LoadingState />;
+  if (error) return <ErrorState message={error.message} onRetry={refetch} />;
+  if (!meal) return <EmptyState message="Meal not found..." />;
 
-  if (!meal) {
-    return (
-      <View>
-        <Text>Meal not found...</Text>
-      </View>
-    );
-  }
-
-  const {
-    imageUrl,
-    title,
-    duration,
-    complexity,
-    affordability,
-    ingredients,
-    steps,
-  } = meal;
+  const { thumbnail, name, category, area, ingredients, steps } = meal;
 
   function onTapFavorite() {
     if (mealIsFavorite) {
@@ -66,17 +55,22 @@ export default function MealDetails() {
         }}
       />
 
-      <Image style={styles.image} source={{ uri: imageUrl }} />
-      <Text style={styles.title}>{title}</Text>
-      <MealDetailsInfo
-        duration={duration}
-        complexity={complexity}
-        affordability={affordability}
+      <Image
+        style={styles.image}
+        source={thumbnail}
+        transition={200}
+        accessibilityIgnoresInvertColors
       />
+      <Text style={styles.title}>{name}</Text>
+      <MealDetailsInfo category={category} area={area} />
       <View style={styles.listOuterContainer}>
         <View style={styles.listContainer}>
           <Subtitle>Ingredients</Subtitle>
-          <List items={ingredients} />
+          <List
+            items={ingredients.map((ingredient) =>
+              `${ingredient.measure} ${ingredient.name}`.trim(),
+            )}
+          />
           <Subtitle>Steps</Subtitle>
           <List items={steps} />
         </View>
@@ -92,6 +86,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 350,
+    backgroundColor: "#e5e5e5",
   },
   title: {
     fontWeight: "bold",

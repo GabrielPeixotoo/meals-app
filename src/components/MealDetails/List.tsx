@@ -5,8 +5,8 @@ interface ListProps {
 }
 
 export default function List({ items }: ListProps) {
-  return items.map((item) => (
-    <View key={item} style={styles.listItem}>
+  return items.map((item, index) => (
+    <View key={index} style={styles.listItem}>
       <Text style={styles.itemText}>{item}</Text>
     </View>
   ));

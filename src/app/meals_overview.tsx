@@ -1,16 +1,23 @@
+import { useMealsByCategory } from "@/api/queries";
 import MealsList from "@/components/MealsList/MealsList";
-import { CATEGORIES, MEALS } from "@/data/dummy_data";
+import {
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from "@/components/ui/ScreenState";
+import { useRefreshByUser } from "@/hooks/useRefreshByUser";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 export default function MealsOverview() {
-  const { categoryId } = useLocalSearchParams<{ categoryId: string }>();
+  const { category } = useLocalSearchParams<{ category: string }>();
   const router = useRouter();
-
-  const displayedMeals = MEALS.filter((meal) => {
-    return meal.categoryIds.indexOf(categoryId) >= 0;
-  });
-
-  const categoryTitle = CATEGORIES.find((cat) => cat.id === categoryId)?.title;
+  const {
+    data: meals,
+    isPending,
+    error,
+    refetch,
+  } = useMealsByCategory(category);
+  const { isRefreshing, onRefresh } = useRefreshByUser(refetch);
 
   function navigateToMealDetails(id: string) {
     router.push({
@@ -21,17 +28,34 @@ export default function MealsOverview() {
     });
   }
 
+  function renderContent() {
+    if (isPending) return <LoadingState />;
+    if (error) return <ErrorState message={error.message} onRetry={refetch} />;
+    if (meals.length === 0) {
+      return <EmptyState message="No meals found in this category." />;
+    }
+
+    return (
+      <MealsList
+        meals={meals}
+        onPress={navigateToMealDetails}
+        refreshing={isRefreshing}
+        onRefresh={onRefresh}
+      />
+    );
+  }
+
   return (
     <>
       <Stack.Screen
         options={{
-          title: categoryTitle ?? "",
+          title: category ?? "",
           headerTitleStyle: {
             color: "white",
           },
         }}
       />
-      <MealsList meals={displayedMeals} onPress={navigateToMealDetails} />
+      {renderContent()}
     </>
   );
 }
